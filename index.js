@@ -246,7 +246,9 @@ class Peer extends stream.Duplex {
   send (chunk) {
     if (this.destroying) return
     if (this.destroyed) throw errCode(new Error('cannot send after peer is destroyed'), 'ERR_DESTROYED')
-    this._channel.send(chunk)
+    if (this._channel.readyState === 'open') {
+      this._channel.send(chunk);
+    }
   }
 
   /**
